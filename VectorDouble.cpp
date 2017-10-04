@@ -2,32 +2,52 @@
 #include <cmath>
 #include <algorithm>	// std::min()
 
+#include "VectorDouble.h"
+
 
 VectorDouble::VectorDouble()
 {
-		contents = new int[50];
+		contents = new double[50];
 		this->max_count = 50;
 		this->count = 0;
+
+		for ( int i = 0; i < max_count; i++ )
+        {
+            contents[i] = 0;
+        }
 }
 
 VectorDouble::VectorDouble( int capacity )
 {
-		contents = new int[capacity];
+		contents = new double[capacity];
 		this->max_count = capacity;
 		this->count = 0;
+
+		for ( int i = 0; i < max_count; i++ )
+        {
+            contents[i] = 0;
+        }
 }
 
 VectorDouble::VectorDouble( VectorDouble& copyTemplate )
 {
-		contents = new int[copyTemplate.capacity()];
+		contents = new double[copyTemplate.capacity()];
 		this->max_count = copyTemplate.capacity();
 
-		for ( int i = 0; i < copyTemplate.size(); i++ )
+		for ( int i = 0; i < max_count; i++ )
 		{
-			contents[i] = copyTemplate.value_at(i);
+		    if ( i < copyTemplate.size() )
+            {
+                contents[i] = copyTemplate.value_at(i);
+            }
+            else
+            {
+                contents[i] = 0;
+            }
+
 		}
 
-		this->count = copyTempalate.size();
+		this->count = copyTemplate.size();
 }
 
 VectorDouble::~VectorDouble()
@@ -35,31 +55,16 @@ VectorDouble::~VectorDouble()
 	delete [] contents;
 }
 
-friend void operator =( const Vector& Vector1, const Vector& Vector2)
+bool VectorDouble::operator==( const VectorDouble& Vector1 )
 {
-	if ( Vector1.capacity() < Vector2.size() )
-	{
-		Vector1.resize( Vector2.count )
-	}
-
-	Vector1.clear();
-	for ( int i = 0; i < Vector2.count; i++ )
-	{
-		Vector1.contents[i] = Vector2.contents[i];
-	}
-	Vector1.count = Vector2.count;
-}
-
-friend bool operator ==( const Vector& vector1, const Vector& vector2)
-{
-	if ( Vector1.count != Vector2.count )
+	if ( this->count != Vector1.size() )
 	{
 		return false;
 	}
 
-	for ( int i = 0; i < Vector1.count; i++ )
+	for ( int i = 0; i < Vector1.size(); i++ )
 	{
-		if ( Vector1.countents[i] != Vector2.contents[i] )
+		if ( this->contents[i] != Vector1.contents[i] )
 		{
 			return false;
 		}
@@ -68,14 +73,23 @@ friend bool operator ==( const Vector& vector1, const Vector& vector2)
 	return true;
 }
 
-double VectorDouble::value_at( int i)
+double VectorDouble::value_at( int i) const
 {
 	return contents[i];
 }
 
 void VectorDouble::change_value_at( double d, int i)
 {
+    if ( i > max_count )
+    {
+        return;
+    }
+
 	contents[i] = d;
+	if ( i > this->count )
+    {
+        this->count = i;
+    }
 }
 
 void VectorDouble::push_back( double appendage )
@@ -84,23 +98,24 @@ void VectorDouble::push_back( double appendage )
 	{
 		this->resize( max_count + 1 );
 	}
-	this->contents[count+1] = appendage;
 	count++;
+	this->contents[count] = appendage;
 }
 
 void VectorDouble::pop_back()
 {
+    contents[count] = 0;
 	count--;
 }
 
-int VectorDouble::capacity()
+int VectorDouble::capacity() const
 {
 	return max_count;
 }
 
-int VectorDouble::size()
+int VectorDouble::size() const
 {
-	return count;
+	return this->count;
 }
 
 void VectorDouble::reserve( int minSize )
@@ -115,24 +130,32 @@ void VectorDouble::reserve( int minSize )
 	}
 }
 
-void VectorDouble::resize( int size );
+void VectorDouble::resize( int size )
 {
-	int* newArray = new int [size];
+	double* newArray = new double[size];
 
-	for ( int i = 0; std::min(size, this->count); i++ )
+	for ( int i = 0; i < size; i++ )
 	{
-		newArray[i] = this->contents[i];
+        if ( i < this->count )
+        {
+            newArray[i] = this->contents[i];
+        }
+        else
+        {
+            newArray[i] = 0.0;
+        }
+
 	}
 
 	this->max_count = size;
-	this->count = min( this->max_count, this->size );
+	this->count = std::min( this->max_count, this->count );
 	delete [] contents;
 	contents = newArray;
 
 }
 
 // private
-void VectorDouble::clear();
+void VectorDouble::clear()
 {
 	this->count = 0;
 }
