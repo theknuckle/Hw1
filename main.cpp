@@ -1,6 +1,6 @@
 #include <iostream>
 #include "VectorDouble.h"
-#include "VectorDouble.cpp"
+
 
 
 
@@ -73,12 +73,12 @@ int main()
 
 
 
-	std::cout << "please enter number of elements you would like to input" << std::endl;
+	std::cout << "Please enter number of elements you would like to input" << std::endl;
 	std::cin >> userElements;
 
 	UserVector.resize( userElements );
 
-	std::cout << "enter the elements, after each element please press enter " << std::endl;
+	std::cout << "Enter the elements, after each element please press enter " << std::endl;
 
 	for ( int i = 0; i < userElements; i++ )
 	{
@@ -95,7 +95,7 @@ int main()
 
 	}
 
-	std::cout << "displaying vector contents: " << std::endl;
+	std::cout << "Displaying vector contents: " << std::endl;
 
 
 	for ( int i = 0; i < userElements; i++ )
@@ -103,6 +103,16 @@ int main()
 		std::cout << UserVector.value_at(i) << std::endl;
 	}
 
+	std::cout << "Now to make vector 2 the same as your vector using the assignment operator" << std::endl << std::endl;
+	
+	Vector2 = UserVector;
+	
+	std::cout << "Displaying vector 2 contents: " << std::endl;
+	
+		for ( int i = 0; i < userElements; i++ )
+	{
+		std::cout << Vector2.value_at(i) << std::endl;
+	}
 
 	return 0;
 }

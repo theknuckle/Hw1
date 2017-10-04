@@ -126,7 +126,7 @@ void VectorDouble::reserve( int minSize )
 	}
 	else
 	{
-		this->resize( minSize );
+		this->max_count = minSize;
 	}
 }
 
@@ -147,8 +147,12 @@ void VectorDouble::resize( int size )
 
 	}
 
-	this->max_count = size;
-	this->count = std::min( this->max_count, this->count );
+	if ( this->max_count <= size )
+	{
+		this->reserve(size);
+	}
+	
+	this->count = size;
 	delete [] contents;
 	contents = newArray;
 
